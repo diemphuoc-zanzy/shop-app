@@ -2,15 +2,10 @@ spring:
   application:
     name: shopapp
   datasource:
-    url: jdbc:postgresql://localhost:5432/shopapp?currentSchema=public
+    url: jdbc:postgresql://ep-red-dream-a19i1shc.ap-southeast-1.aws.neon.tech/shopapp-db
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: 123
-
-#    url: jdbc:postgresql://ep-red-dream-a19i1shc.ap-southeast-1.aws.neon.tech/shopapp-db
-#    driver-class-name: org.postgresql.Driver
-#    username: shopapp-db_owner
-#    password: B1YjM0mthxJQ
+    username: shopapp-db_owner
+    password: B1YjM0mthxJQ
 
   jpa:
     show-sql: true
