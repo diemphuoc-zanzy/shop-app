@@ -2,10 +2,10 @@ spring:
   application:
     name: shopapp
   datasource:
-    url: jdbc:mysql://localhost:3306/shopapp?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: rootpassword
+    url: jdbc:postgresql://localhost:5432/shopapp?currentSchema=public
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123
 
   jpa:
     show-sql: true
@@ -13,7 +13,7 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true
 
