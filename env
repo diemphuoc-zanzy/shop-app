@@ -1,0 +1,3 @@
+DATASOURCE_URL = jdbc:postgresql://ep-red-dream-a19i1shc.ap-southeast-1.aws.neon.tech/shopapp-db
+DATASOURCE_USER= shopapp-db_owner
+DATASOURCE_PASSWORD= B1YjM0mthxJQ
