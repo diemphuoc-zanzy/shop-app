@@ -6,8 +6,6 @@ import com.project.shopapp.models.Category_;
 import com.project.shopapp.models.base.BaseModel_;
 import com.project.shopapp.specs.base.BasePredicate;
 import com.project.shopapp.dtos.request.CategoryRequestDto;
-import com.project.shopapp.models.Category;
-import com.project.shopapp.models.Category_;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

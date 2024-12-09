@@ -5,7 +5,6 @@ import com.project.shopapp.common.base.PaginationDetails;
 import com.project.shopapp.common.base.ResponseWrapper;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.Page;
 
 @Setter
 @Getter
@@ -16,13 +15,15 @@ public class PaginatedDataResponse extends ResponseWrapper {
     // Constructor cho thành công
     public PaginatedDataResponse(Object responseData) {
         super();
-        if (responseData instanceof Page<?> page) {
-            this.responseData = page.getContent();
-            this.pagination = new PaginationDetails(page);
-            return;
-        }
         this.responseData = responseData;
         this.pagination = null;
+    }
+
+    // Constructor cho thành oông custom
+    public PaginatedDataResponse(Object responseData, PaginationDetails paginationDetails) {
+        super();
+        this.responseData = responseData;
+        this.pagination = paginationDetails;
     }
 
     // Constructor cho lỗi

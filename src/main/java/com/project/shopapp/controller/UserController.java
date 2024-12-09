@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<PaginatedDataResponse> registerUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-            PaginatedDataResponse response = userService.createUser(userRequestDto);
+            PaginatedDataResponse response = userService.register(userRequestDto);
             return ResponseEntity.ok().body(response);
     }
 

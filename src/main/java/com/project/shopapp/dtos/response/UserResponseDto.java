@@ -1,6 +1,5 @@
 package com.project.shopapp.dtos.response;
 
-import com.project.shopapp.dtos.request.base.BaseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
