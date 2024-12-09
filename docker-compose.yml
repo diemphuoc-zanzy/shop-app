@@ -11,7 +11,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DATASOURCE_USER}
       SPRING_DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: org.postgresql.Driver
-      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      SPRING_JPA_HIBERNATE_DDL-AUTO: none
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
       SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: true
       SPRING_JPA_PROPERTIES_HIBERNATE_SHOW_SQL: true
@@ -30,7 +30,7 @@ services:
       POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
       POSTGRES_DB: shopapp
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ./sql-scripts:/docker-entrypoint-initdb.d
     networks:
       - shopapp-network
 
