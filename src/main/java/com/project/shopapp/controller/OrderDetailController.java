@@ -3,7 +3,6 @@ package com.project.shopapp.controller;
 import com.project.shopapp.dtos.request.OrderDetailRequestDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.services.IOrderDetailService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -3,6 +3,7 @@ package com.project.shopapp.services.implement;
 import com.project.shopapp.common.RECORD_STATUS;
 import com.project.shopapp.confiuration.exception.BadRequestException;
 import com.project.shopapp.confiuration.exception.NotFoundException;
+import com.project.shopapp.dtos.response.OrderDetailResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.dtos.request.OrderDetailRequestDto;
 import com.project.shopapp.models.Order;
@@ -15,6 +16,7 @@ import com.project.shopapp.services.IOrderDetailService;
 import com.project.shopapp.specs.OrderDetailSpec;
 import com.project.shopapp.specs.OrderSpec;
 import com.project.shopapp.specs.ProductSpec;
+import com.project.shopapp.utils.DtoMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,16 +35,18 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
     private final OrderSpec orderSpec;
     private final ProductSpec productSpec;
 
+    private final DtoMapper dtoMapper;
+
     @Override
     public PaginatedDataResponse getDetails(OrderDetailRequestDto orderDetailDto) {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll(orderDetailSpec.getOrderDetails(orderDetailDto));
-        return new PaginatedDataResponse(orderDetails);
+        return dtoMapper.makeResponse(OrderDetailResponseDto.class, orderDetails);
     }
 
     @Override
     public PaginatedDataResponse getOrderDetails(OrderDetailRequestDto orderDetailDto) {
         List<OrderDetail> orderDetails = orderDetailRepository.findAll(orderDetailSpec.getOrderDetails(orderDetailDto));
-        return new PaginatedDataResponse(orderDetails);
+        return dtoMapper.makeResponse(OrderDetailResponseDto.class, orderDetails);
     }
 
     @Override
@@ -71,7 +75,7 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
         orderDetail.setProduct(product);
 
         orderDetail = orderDetailRepository.save(orderDetail);
-        return new PaginatedDataResponse(orderDetail);
+        return dtoMapper.makeResponse(OrderDetailResponseDto.class, orderDetail);
     }
 
     @Override
@@ -96,7 +100,7 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
         orderDetailExist.setProduct(product);
         orderDetailExist = orderDetailRepository.save(orderDetailExist);
 
-        return new PaginatedDataResponse(orderDetailExist);
+        return dtoMapper.makeResponse(OrderDetailResponseDto.class, orderDetailExist);
     }
 
     @Override

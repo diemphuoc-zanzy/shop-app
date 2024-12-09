@@ -1,6 +1,7 @@
 package com.project.shopapp.services.implement;
 
 import com.project.shopapp.component.JwtToken;
+import com.project.shopapp.dtos.response.UserResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.confiuration.exception.BadRequestException;
 import com.project.shopapp.confiuration.exception.UnauthorizedAccessException;
@@ -10,13 +11,12 @@ import com.project.shopapp.models.User;
 import com.project.shopapp.repositories.RoleRepository;
 import com.project.shopapp.repositories.UserRepository;
 import com.project.shopapp.services.IUserService;
+import com.project.shopapp.utils.DtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +27,10 @@ public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtToken jwtToken;
     private final AuthenticationManager authenticationManager;
+    private final DtoMapper mapper;
 
     @Override
-    public PaginatedDataResponse createUser(UserRequestDto userRequestDto) {
+    public PaginatedDataResponse register(UserRequestDto userRequestDto) {
         if (!userRequestDto.isMatchWithRetypePassword())
             throw new BadRequestException("Retype password is not match");
 
@@ -59,7 +60,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         newUser = userRepository.save(newUser);
-        return new PaginatedDataResponse(newUser);
+        return mapper.makeResponse(UserResponseDto.class, newUser);
     }
 
     @Override
