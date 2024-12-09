@@ -15,10 +15,10 @@ import java.time.Instant;
 @NoArgsConstructor
 @MappedSuperclass
 public class BaseModel {
-    @Column(name = "created_at")
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant updatedAt;
 
 //    @Column(name = "createdBy")
@@ -27,9 +27,9 @@ public class BaseModel {
 //    @Column(name = "updatedBy")
 //    private String updatedBy;
 
-    @Column(name = "record_status")
+    @Column(name = "record_status", columnDefinition = "TEXT DEFAULT 'ACTIVE'")
     @Enumerated(EnumType.STRING)
-    private RECORD_STATUS recordStatus = RECORD_STATUS.ACTIVE;
+    private RECORD_STATUS recordStatus;
 
 
     @PrePersist
