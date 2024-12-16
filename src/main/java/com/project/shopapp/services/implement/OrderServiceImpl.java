@@ -12,9 +12,11 @@ import com.project.shopapp.utils.DtoMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,11 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final OrderSpec orderSpec;
     private final DtoMapper mapper;
+
+    @Override
+    public Optional<Order> iFindOne(Specification<Order> specification) {
+        return orderRepository.findOne(specification);
+    }
 
     @Override
     public PaginatedDataResponse getOrders(OrderRequestDto orderRequestDto) {

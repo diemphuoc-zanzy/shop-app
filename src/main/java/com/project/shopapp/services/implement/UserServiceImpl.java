@@ -1,6 +1,7 @@
 package com.project.shopapp.services.implement;
 
-import com.project.shopapp.component.JwtToken;
+import com.project.shopapp.services.IRoleService;
+import com.project.shopapp.utils.JwtTokenUtil;
 import com.project.shopapp.dtos.response.UserResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.confiuration.exception.BadRequestException;
@@ -8,7 +9,6 @@ import com.project.shopapp.confiuration.exception.UnauthorizedAccessException;
 import com.project.shopapp.dtos.request.UserRequestDto;
 import com.project.shopapp.models.Role;
 import com.project.shopapp.models.User;
-import com.project.shopapp.repositories.RoleRepository;
 import com.project.shopapp.repositories.UserRepository;
 import com.project.shopapp.services.IUserService;
 import com.project.shopapp.utils.DtoMapper;
@@ -23,9 +23,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final IRoleService roleService;
     private final PasswordEncoder passwordEncoder;
-    private final JwtToken jwtToken;
+    private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     private final DtoMapper mapper;
 
@@ -47,9 +47,7 @@ public class UserServiceImpl implements IUserService {
 
         newUser = new User(userRequestDto);
 
-        Role role = roleRepository
-                .findById(userRequestDto.getRoleId())
-                .orElseThrow(() -> new UnauthorizedAccessException("Role Unauthorized Access"));
+        Role role = roleService.getRole(userRequestDto.getRoleId());
 
         newUser.setRole(role);
         if (userRequestDto.getFacebookAccountId() == 0
@@ -78,12 +76,13 @@ public class UserServiceImpl implements IUserService {
         //creating authentication token
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                 userRequestDto.getPhoneNumber(),
-                userRequestDto.getPassword()
+                userRequestDto.getPassword(),
+                existUser.getAuthorities()
         );
 
         //authentication with Java Spring Security
         authenticationManager.authenticate(authenticationToken);
-        String token = jwtToken.generateToken(existUser);
+        String token = jwtTokenUtil.generateToken(existUser);
         return new PaginatedDataResponse(token);
     }
 }

@@ -50,7 +50,7 @@ public class User extends BaseModel implements UserDetails {
     @Column(name = "google_account_id")
     private Integer googleAccountId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -70,7 +70,7 @@ public class User extends BaseModel implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + getRole().getName()));
+        authorities.add(new SimpleGrantedAuthority(getRole().getName()));
         return authorities;
     }
 

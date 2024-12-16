@@ -1,8 +1,5 @@
 package com.project.shopapp.common.constant;
 
-import com.project.shopapp.common.IMAGE_FORMAT;
-
-import java.util.List;
 
 public final class Constant {
 
@@ -18,7 +15,6 @@ public final class Constant {
         public static final String QUOTE = "'";
         public static final String DOUBLE_QUOTE = "";
     }
-
 
     public static final class UPLOAD {
         public static final String UPLOAD_DIR = "uploads/images/";
@@ -39,5 +35,10 @@ public final class Constant {
 
             public static final String REMAINING_UPLOAD_IMAGE_PER_PRODUCT = "Remaining upload image files: ";
         }
+    }
+
+    public static final class HEADER {
+        public static final String AUTHORIZATION = "Authorization";
+        public static final String BEARER = "Bearer ";
     }
 }

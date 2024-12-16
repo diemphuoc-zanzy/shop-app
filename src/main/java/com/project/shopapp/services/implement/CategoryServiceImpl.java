@@ -30,6 +30,11 @@ public class CategoryServiceImpl implements ICategoryService {
     private final DtoMapper dtoMapper;
 
     @Override
+    public Category iFindByName(String categoryName) {
+        return categoryRepository.findByName(categoryName);
+    }
+
+    @Override
     public PaginatedDataResponse getCategories(CategoryRequestDto categoryRequestDto) {
         Page<Category> categories = categoryRepository
                 .findAll(categorySpec.getCategories(categoryRequestDto), categoryRequestDto.toPageable());

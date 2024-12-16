@@ -8,31 +8,35 @@ import com.project.shopapp.confiuration.exception.NotFoundException;
 import com.project.shopapp.dtos.request.ProductRequestDto;
 import com.project.shopapp.models.Category;
 import com.project.shopapp.models.Product;
-import com.project.shopapp.repositories.CategoryRepository;
 import com.project.shopapp.repositories.ProductRepository;
-import com.project.shopapp.services.IProductImageService;
+import com.project.shopapp.services.ICategoryService;
 import com.project.shopapp.services.IProductService;
 import com.project.shopapp.utils.DtoMapper;
 import com.project.shopapp.specs.ProductSpec;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements IProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-
-    private final IProductImageService productImageService;
+    private final ICategoryService categoryService;
 
     private final ProductSpec productSpec;
 
     private final DtoMapper dtoMapper;
+
+    @Override
+    public Optional<Product> iFindOne(Specification<Product> specification) {
+        return productRepository.findOne(specification);
+    }
 
     @Override
     public PaginatedDataResponse getProducts(ProductRequestDto productRequestDto) {
@@ -60,7 +64,7 @@ public class ProductServiceImpl implements IProductService {
         Category category = null;
 
         if (productRequestDto.getCategoryName() != null) {
-            category = categoryRepository.findByName(productRequestDto.getCategoryName());
+            category = categoryService.iFindByName(productRequestDto.getCategoryName());
         }
 
         if (product!= null) {
@@ -85,7 +89,7 @@ public class ProductServiceImpl implements IProductService {
         Category category = null;
 
         if (productRequestDto.getCategoryName()!= null) {
-            category = categoryRepository.findByName(productRequestDto.getCategoryName());
+            category = categoryService.iFindByName(productRequestDto.getCategoryName());
         }
 
         productExist.update(productRequestDto);

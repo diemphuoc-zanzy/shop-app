@@ -27,10 +27,10 @@ public class FileUtil {
     public String getFileExtension(MultipartFile file) {
         String filename = file.getOriginalFilename();
         if (filename != null && filename.contains(Constant.CHARACTER.PERIOD)) {
-            // Trả về phần mở rộng (extension) của tệp
+            // return extension of file
             return filename.substring(filename.lastIndexOf(Constant.CHARACTER.PERIOD) + 1);
         }
-        return Constant.CHARACTER.EMPTY; // Trả về chuỗi rỗng nếu không có phần mở rộng
+        return Constant.CHARACTER.EMPTY; // return if empty
     }
 
     public String getUniqueFileName(String fileName) {

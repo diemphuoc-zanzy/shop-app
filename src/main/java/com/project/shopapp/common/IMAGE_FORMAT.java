@@ -14,11 +14,10 @@ public enum IMAGE_FORMAT {JPEG("jpeg", "JPEG Image", "image/jpeg"),
     EPS("eps", "EPS Image", "application/postscript"),
     PDF("pdf", "PDF Document", "application/pdf");
 
-    private final String extension;  // Đuôi file
-    private final String description;  // Mô tả về loại hình ảnh
-    private final String mimeType;  // MIME type của hình ảnh
+    private final String extension;  // extension file
+    private final String description;  // description image
+    private final String mimeType;  // MIME type of image
 
-    // Constructor
     IMAGE_FORMAT(String extension, String description, String mimeType) {
         this.extension = extension;
         this.description = description;
