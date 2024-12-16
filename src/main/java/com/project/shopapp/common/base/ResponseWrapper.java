@@ -9,18 +9,18 @@ import org.springframework.http.HttpStatus;
 @Setter
 @Getter
 public class ResponseWrapper {
-    private RESPONSE_STATUS status; // Trạng thái ("SUCCESS" hoặc "ERROR")
-    private int messageCode;        // Mã thông điệp (mã lỗi hoặc mã thành công)
-    private String message;         // Thông điệp (ví dụ: "OK" hoặc mô tả lỗi)
-    private int errorCode;          // Mã lỗi (nếu có)
-    private String errorMessage;    // Thông điệp lỗi (nếu có)
+    private RESPONSE_STATUS status; // ("SUCCESS" || "ERROR")
+    private int messageCode;        // message code (example: 200)
+    private String message;         // message (example: "OK" or message error)
+    private int errorCode;          // error code
+    private String errorMessage;    // message error
 
     public ResponseWrapper(){
         this.status = RESPONSE_STATUS.SUCCESS;
         this.message = HttpStatus.OK.name();
         this.messageCode = HttpStatus.OK.value();
-        this.errorCode = 0;         // Không có lỗi khi thành công
-        this.errorMessage = null;   // Không có thông điệp lỗi khi thành công
+        this.errorCode = 0;
+        this.errorMessage = null;
     }
 
     public ResponseWrapper(RESPONSE_STATUS status, int errorCode, String errorMessage) {

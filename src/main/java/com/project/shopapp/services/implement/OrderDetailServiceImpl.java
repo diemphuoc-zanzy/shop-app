@@ -10,9 +10,9 @@ import com.project.shopapp.models.Order;
 import com.project.shopapp.models.OrderDetail;
 import com.project.shopapp.models.Product;
 import com.project.shopapp.repositories.OrderDetailRepository;
-import com.project.shopapp.repositories.OrderRepository;
-import com.project.shopapp.repositories.ProductRepository;
 import com.project.shopapp.services.IOrderDetailService;
+import com.project.shopapp.services.IOrderService;
+import com.project.shopapp.services.IProductService;
 import com.project.shopapp.specs.OrderDetailSpec;
 import com.project.shopapp.specs.OrderSpec;
 import com.project.shopapp.specs.ProductSpec;
@@ -22,15 +22,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderDetailServiceImpl implements IOrderDetailService {
 
     private final OrderDetailRepository orderDetailRepository;
-    private final OrderRepository orderRepository;
-    private final ProductRepository productRepository;
+    private final IOrderService orderService;
+    private final IProductService productService;
     private final OrderDetailSpec orderDetailSpec;
     private final OrderSpec orderSpec;
     private final ProductSpec productSpec;
@@ -56,10 +55,10 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
             throw new NotFoundException("Order Is Not Found");
         }
 
-        Order order = orderRepository.findOne(orderSpec.getOrderById(orderDetailDto.getOrderId()))
+        Order order = orderService.iFindOne(orderSpec.getOrderById(orderDetailDto.getOrderId()))
                 .orElseThrow(() -> new NotFoundException("Order Is Not Found"));
 
-        Product product = productRepository.findOne(productSpec.getProductById(orderDetailDto.getProductId()))
+        Product product = productService.iFindOne(productSpec.getProductById(orderDetailDto.getProductId()))
                 .orElseThrow(() -> new NotFoundException("Product Is Not Found"));
 
         OrderDetail orderDetail = orderDetailRepository
@@ -85,10 +84,10 @@ public class OrderDetailServiceImpl implements IOrderDetailService {
             throw new NotFoundException("Order Is Not Found");
         }
 
-        Order order = orderRepository.findOne(orderSpec.getOrderById(orderDetailDto.getOrderId()))
+        Order order = orderService.iFindOne(orderSpec.getOrderById(orderDetailDto.getOrderId()))
                 .orElseThrow(() -> new NotFoundException("Order Is Not Found"));
 
-        Product product = productRepository.findOne(productSpec.getProductById(orderDetailDto.getProductId()))
+        Product product = productService.iFindOne(productSpec.getProductById(orderDetailDto.getProductId()))
                 .orElseThrow(() -> new NotFoundException("Product Is Not Found"));
 
         OrderDetail orderDetailExist = orderDetailRepository

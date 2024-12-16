@@ -1,4 +1,4 @@
-package com.project.shopapp.component;
+package com.project.shopapp.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -19,8 +20,8 @@ import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class JwtToken {
-    private static final Logger logger = LoggerFactory.getLogger(JwtToken.class);
+public class JwtTokenUtil {
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
 
     @Value("${jwt.expiration}")
     private int expiration;
@@ -56,7 +57,7 @@ public class JwtToken {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
@@ -65,8 +66,19 @@ public class JwtToken {
         return clamsResolve.apply(claims);
     }
 
+    public String extractPhoneNumber(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    //check phone number
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String phoneNumber = this.extractPhoneNumber(token);
+        return phoneNumber.equals(userDetails.getUsername())
+                && !isTokenExpired(token);
+    }
+
     //check expiration
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         final Date expiration = this.extractClaim(token, Claims::getExpiration);
         return expiration.before(new Date());
     }

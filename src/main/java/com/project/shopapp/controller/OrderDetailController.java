@@ -29,7 +29,7 @@ public class OrderDetailController {
     }
 
 
-    @PutMapping("/create")
+    @PostMapping("/create")
     public ResponseEntity<PaginatedDataResponse> createDetail(@RequestBody OrderDetailRequestDto orderDetailRequestDto) {
         PaginatedDataResponse response = orderDetailService.createOrderDetail(orderDetailRequestDto);
         return ResponseEntity.ok().body(response);

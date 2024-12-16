@@ -25,7 +25,7 @@ public class ProductImageController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = "/delete")
+    @DeleteMapping(value = "/delete")
     public ResponseEntity<PaginatedDataResponse> deleteProductImage(@RequestBody List<Long> productImageIds) {
         productImageService.deleteProductImage(productImageIds);
         return ResponseEntity.ok(new PaginatedDataResponse("Delete product image successfully"));
