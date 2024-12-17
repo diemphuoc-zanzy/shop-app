@@ -18,7 +18,7 @@ public class OrderController {
 
     private final IOrderService orderService;
 
-    @GetMapping("/gets")
+    @PostMapping("/gets")
     public ResponseEntity<PaginatedDataResponse> getOrders(@RequestBody OrderRequestDto orderRequestDto) {
         PaginatedDataResponse response = orderService.getOrders(orderRequestDto);
         return ResponseEntity.ok(response);

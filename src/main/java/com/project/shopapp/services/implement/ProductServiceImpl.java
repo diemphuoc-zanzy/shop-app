@@ -3,7 +3,6 @@ package com.project.shopapp.services.implement;
 import com.project.shopapp.common.RECORD_STATUS;
 import com.project.shopapp.dtos.response.ProductResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
-import com.project.shopapp.confiuration.exception.BadRequestException;
 import com.project.shopapp.confiuration.exception.NotFoundException;
 import com.project.shopapp.dtos.request.ProductRequestDto;
 import com.project.shopapp.models.Category;
@@ -39,6 +38,18 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public Product iFindById(Long productId) {
+        return productRepository
+                .findOne(productSpec.getProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Product not found"));
+    }
+
+    @Override
+    public Product iFindByName(String productName) {
+        return productRepository.findByName(productName);
+    }
+
+    @Override
     public PaginatedDataResponse getProducts(ProductRequestDto productRequestDto) {
         Page<Product> products = productRepository.findAll(productSpec.getProducts(productRequestDto), productRequestDto.toPageable());
 
@@ -50,9 +61,7 @@ public class ProductServiceImpl implements IProductService {
         if (id == null)
             throw new NotFoundException("Product not found");
 
-        Product product = productRepository
-                .findOne(productSpec.getProductById(id))
-                .orElseThrow(() -> new NotFoundException("Product not found"));
+        Product product = this.iFindById(id);
 
         return dtoMapper.makeResponse(ProductResponseDto.class, product);
     }
@@ -60,8 +69,12 @@ public class ProductServiceImpl implements IProductService {
     @Override
     @Transactional
     public PaginatedDataResponse createProduct(ProductRequestDto productRequestDto) {
-        Product product = productRepository.findByName(productRequestDto.getName());
+        Product product = this.iFindByName(productRequestDto.getName());
         Category category = null;
+
+        if (productRequestDto.getCategoryId() != null) {
+            category = categoryService.iFindById(productRequestDto.getCategoryId());
+        }
 
         if (productRequestDto.getCategoryName() != null) {
             category = categoryService.iFindByName(productRequestDto.getCategoryName());
@@ -83,9 +96,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     @Transactional
     public PaginatedDataResponse updateProduct(ProductRequestDto productRequestDto) {
-        Product productExist = productRepository
-                .findOne(productSpec.getProductById(productRequestDto.getId()))
-                .orElseThrow(() -> new BadRequestException("Not found Product"));
+        Product productExist = this.iFindById(productRequestDto.getId());
         Category category = null;
 
         if (productRequestDto.getCategoryName()!= null) {

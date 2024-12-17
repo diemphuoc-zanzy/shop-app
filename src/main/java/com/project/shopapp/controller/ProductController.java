@@ -17,7 +17,7 @@ public class ProductController {
 
     private final IProductService productService;
 
-    @GetMapping("/gets")
+    @PostMapping("/gets")
     public ResponseEntity<PaginatedDataResponse> gets(@RequestBody ProductRequestDto productRequestDto) {
         PaginatedDataResponse response = productService.getProducts(productRequestDto);
         return ResponseEntity.ok(response);

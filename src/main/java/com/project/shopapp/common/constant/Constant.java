@@ -1,6 +1,8 @@
 package com.project.shopapp.common.constant;
 
 
+import java.util.List;
+
 public final class Constant {
 
     public static final class CHARACTER {
@@ -40,5 +42,23 @@ public final class Constant {
     public static final class HEADER {
         public static final String AUTHORIZATION = "Authorization";
         public static final String BEARER = "Bearer ";
+        public static final List<String> ALLOWED =
+                List.of(
+                        "authorization",
+                        "content-type",
+                        "application/json",
+                        "accept",
+                        "x-auth-token"
+                );
+    }
+
+    public static final class METHOD {
+        public static final List<String> ALLOWED =
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE"
+                );
     }
 }

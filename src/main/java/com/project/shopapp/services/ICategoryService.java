@@ -7,6 +7,7 @@ import com.project.shopapp.models.Category;
 import java.util.List;
 
 public interface ICategoryService {
+    Category iFindById(Long categoryId);
     Category iFindByName(String categoryName);
     PaginatedDataResponse getCategories(CategoryRequestDto categoryRequestDto);
     PaginatedDataResponse getCategoryById(Long id);
