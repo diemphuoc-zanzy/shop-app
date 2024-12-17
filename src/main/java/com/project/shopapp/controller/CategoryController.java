@@ -16,7 +16,7 @@ public class CategoryController {
 
     private final ICategoryService categoryService;
 
-    @GetMapping("/gets")
+    @PostMapping("/gets")
     public ResponseEntity<PaginatedDataResponse> getCategories(@RequestBody CategoryRequestDto category) {
         PaginatedDataResponse response = categoryService.getCategories(category);
         return ResponseEntity.ok(response);

@@ -10,6 +10,8 @@ import java.util.Optional;
 
 public interface IProductService {
     Optional<Product> iFindOne(Specification<Product> specification);
+    Product iFindById(Long productId);
+    Product iFindByName(String productName);
     PaginatedDataResponse getProducts(ProductRequestDto categoryDto);
     PaginatedDataResponse getProductById(Long id);
     PaginatedDataResponse createProduct(ProductRequestDto categoryDto);

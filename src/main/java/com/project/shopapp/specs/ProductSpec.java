@@ -32,6 +32,14 @@ public class ProductSpec {
                 predicate.addLikeCondition(builder, root, Product_.NAME, productRequestDto.getName());
             }
 
+            if (productRequestDto.getCategoryId() != null) {
+                predicate.addEqualCondition(builder, join, Category_.ID, productRequestDto.getCategoryId());
+            }
+
+            if (StringUtils.isNotEmpty(productRequestDto.getCategoryName())) {
+                predicate.addEqualCondition(builder, join, Category_.NAME, productRequestDto.getCategoryName());
+            }
+
             // Trả về predicate để xây dựng query
             return predicate.toPredicate(builder);
         };

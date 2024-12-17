@@ -88,7 +88,7 @@ public class JwtTokenFilterUtil extends OncePerRequestFilter {
     }
 
     private boolean validatePathMethod(HttpServletRequest request, Permission permission) {
-        String path = apiPrefix + permission.getResource();
+        String path = permission.getResource();
         String method = permission.getMethod();
 
         return request.getServletPath().contains(path)

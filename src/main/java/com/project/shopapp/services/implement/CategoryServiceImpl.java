@@ -3,7 +3,6 @@ package com.project.shopapp.services.implement;
 import com.project.shopapp.common.RECORD_STATUS;
 import com.project.shopapp.dtos.response.CategoryResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
-import com.project.shopapp.confiuration.exception.BadRequestException;
 import com.project.shopapp.confiuration.exception.NotFoundException;
 import com.project.shopapp.dtos.request.CategoryRequestDto;
 import com.project.shopapp.models.Category;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +26,13 @@ public class CategoryServiceImpl implements ICategoryService {
     private final CategorySpec categorySpec;
 
     private final DtoMapper dtoMapper;
+
+    @Override
+    public Category iFindById(Long categoryId) {
+        return categoryRepository
+                .findOne(categorySpec.getCategoryById(categoryId))
+                .orElseThrow(() -> new NotFoundException("Category not found"));
+    }
 
     @Override
     public Category iFindByName(String categoryName) {
@@ -47,16 +52,14 @@ public class CategoryServiceImpl implements ICategoryService {
         if (id == null)
             throw new NotFoundException("Not found Category");
 
-        Category category = categoryRepository
-                .findOne(categorySpec.getCategoryById(id))
-                .orElseThrow(() -> new NotFoundException("Not found Category"));
+        Category category = this.iFindById(id);
 
         return dtoMapper.makeResponse(CategoryResponseDto.class, category);
     }
 
     @Override
     public PaginatedDataResponse createCategory(CategoryRequestDto categoryRequestDto) {
-        Category category = categoryRepository.findByName(categoryRequestDto.getName());
+        Category category = this.iFindByName(categoryRequestDto.getName());
         if (category!= null) {
             category.updateRecordStatus(RECORD_STATUS.ACTIVE);
         } else {
@@ -69,9 +72,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public PaginatedDataResponse updateCategory(CategoryRequestDto categoryRequestDto) {
-        Optional<Category> categoryOpt = categoryRepository.findById(categoryRequestDto.getId());
-        Category categoryExist = categoryOpt
-                .orElseThrow(() -> new BadRequestException("Not found Category"));
+        Category categoryExist = this.iFindById(categoryRequestDto.getId());
 
         categoryExist.update(categoryRequestDto);
         categoryExist = categoryRepository.save(categoryExist);

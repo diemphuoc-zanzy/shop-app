@@ -32,7 +32,7 @@ public class ProductRequestDto extends BaseDto {
 
     private String description;
 
-    private String categoryId;
+    private Long categoryId;
 
     private List<MultipartFile> files = new ArrayList<>();
 

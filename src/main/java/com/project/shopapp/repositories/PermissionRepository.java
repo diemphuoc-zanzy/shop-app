@@ -12,6 +12,6 @@ public interface PermissionRepository  extends BaseRepository<Permission, Long> 
     @Query("SELECT p FROM Permission p WHERE p.resource = :resource AND p.method = :method AND p.role.name = :roleName")
     Optional<Permission> findPermission(String resource, String method, String roleName);
 
-    @Query("SELECT p FROM Permission p WHERE p.action = 'NONE'")
+    @Query("SELECT p FROM Permission p JOIN Role r ON r.id = p.role.id WHERE r.name = 'GUEST'")
     Collection<Permission> byPassToken();
 }
