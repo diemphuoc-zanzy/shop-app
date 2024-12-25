@@ -22,14 +22,14 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenFilterUtil extends OncePerRequestFilter {
+public class JwtTokenFilterUtils extends OncePerRequestFilter {
 
     @Value("${api.prefix}")
     private String apiPrefix;
 
     private final UserDetailsService userDetailsService;
     private final IPermissionService permissionService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @Override
     protected void doFilterInternal(
@@ -53,14 +53,14 @@ public class JwtTokenFilterUtil extends OncePerRequestFilter {
                 return false;
 
             final String token = authHeader.substring(bearer.length());
-            final String phoneNumber = jwtTokenUtil.extractPhoneNumber(token);
+            final String phoneNumber = jwtTokenUtils.extractPhoneNumber(token);
 
             if (phoneNumber == null || SecurityContextHolder.getContext().getAuthentication() != null) {
                 return false;
             }
 
             User userDetails = (User) userDetailsService.loadUserByUsername(phoneNumber);
-            if (!jwtTokenUtil.validateToken(token, userDetails)) {
+            if (!jwtTokenUtils.validateToken(token, userDetails)) {
                 return false;
             }
 

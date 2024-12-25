@@ -20,8 +20,8 @@ import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
+public class JwtTokenUtils {
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtils.class);
 
     @Value("${jwt.expiration}")
     private int expiration;

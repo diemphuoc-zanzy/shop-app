@@ -1,14 +1,16 @@
 package com.project.shopapp.services.implement;
 
 import com.project.shopapp.common.RECORD_STATUS;
+import com.project.shopapp.common.constant.MessageKeys;
 import com.project.shopapp.dtos.response.OrderResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.dtos.request.OrderRequestDto;
 import com.project.shopapp.models.Order;
 import com.project.shopapp.repositories.OrderRepository;
 import com.project.shopapp.services.IOrderService;
+import com.project.shopapp.services.implement.base.BaseServiceImpl;
 import com.project.shopapp.specs.OrderSpec;
-import com.project.shopapp.utils.DtoMapper;
+import com.project.shopapp.utils.DtoMapperUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,11 +22,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements IOrderService {
+public class OrderServiceImpl extends BaseServiceImpl implements IOrderService {
 
     private final OrderRepository orderRepository;
     private final OrderSpec orderSpec;
-    private final DtoMapper mapper;
+    private final DtoMapperUtils mapper;
 
     @Override
     public Optional<Order> iFindOne(Specification<Order> specification) {
@@ -49,7 +51,7 @@ public class OrderServiceImpl implements IOrderService {
     public PaginatedDataResponse updateOrder(OrderRequestDto orderRequestDto) {
         Order orderExist = orderRepository
                 .findOne(orderSpec.getOrders(orderRequestDto))
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+                .orElseThrow(() -> new IllegalArgumentException(this.message(MessageKeys.ORDER.DETAIL_NOT_FOUND)));
 
         orderExist.update(orderRequestDto);
         orderExist = orderRepository.save(orderExist);

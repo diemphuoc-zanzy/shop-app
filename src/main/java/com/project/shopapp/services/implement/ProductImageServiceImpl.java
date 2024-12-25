@@ -13,9 +13,10 @@ import com.project.shopapp.models.ProductImage;
 import com.project.shopapp.repositories.ProductImageRepository;
 import com.project.shopapp.repositories.ProductRepository;
 import com.project.shopapp.services.IProductImageService;
+import com.project.shopapp.services.implement.base.BaseServiceImpl;
 import com.project.shopapp.specs.ProductImageSpec;
 import com.project.shopapp.specs.ProductSpec;
-import com.project.shopapp.utils.FileUtil;
+import com.project.shopapp.utils.FileUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductImageServiceImpl implements IProductImageService {
+public class ProductImageServiceImpl extends BaseServiceImpl implements IProductImageService {
 
     private final ProductImageRepository productImageRepository;
     private final ProductRepository productRepository;
@@ -36,7 +37,7 @@ public class ProductImageServiceImpl implements IProductImageService {
     private final ProductImageSpec productImageSpec;
     private final ProductSpec productSpec;
 
-    private final FileUtil fileUtil;
+    private final FileUtils fileUtils;
 
     @Override
     @Transactional
@@ -56,8 +57,8 @@ public class ProductImageServiceImpl implements IProductImageService {
         }
 
         for (MultipartFile file : files) {
-            String uniFileName = fileUtil.getUniqueFileName(file.getOriginalFilename());
-            String imageUrl = fileUtil.storeFile(file, uniFileName);
+            String uniFileName = fileUtils.getUniqueFileName(file.getOriginalFilename());
+            String imageUrl = fileUtils.storeFile(file, uniFileName);
             long imageSize = file.getSize();
             String imageType = file.getContentType();
 
@@ -122,7 +123,7 @@ public class ProductImageServiceImpl implements IProductImageService {
             errorFiles.add(error);
         }
 
-        String extension = fileUtil.getFileExtension(file);
+        String extension = fileUtils.getFileExtension(file);
         List<String> defaultExtensions = IMAGE_FORMAT.getExtensions();
         if (!defaultExtensions.contains(extension)) {
             String message = Constant.CHARACTER.COLON + (String.format(Constant.UPLOAD.MESSAGE.ERROR_FILE_EXTENSION, defaultExtensions));
@@ -143,7 +144,7 @@ public class ProductImageServiceImpl implements IProductImageService {
 
         List<ResponseWrapper> errorFiles = new ArrayList<>();
 
-        imageExists.forEach(imageExist -> fileUtil.removeImage(imageExist, errorFiles));
+        imageExists.forEach(imageExist -> fileUtils.removeImage(imageExist, errorFiles));
 
         if (!errorFiles.isEmpty()) {
             throw new ResponseDataException(

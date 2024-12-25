@@ -1,6 +1,7 @@
 package com.project.shopapp.services.implement;
 
 import com.project.shopapp.common.RECORD_STATUS;
+import com.project.shopapp.common.constant.MessageKeys;
 import com.project.shopapp.dtos.response.ProductResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.confiuration.exception.NotFoundException;
@@ -10,7 +11,8 @@ import com.project.shopapp.models.Product;
 import com.project.shopapp.repositories.ProductRepository;
 import com.project.shopapp.services.ICategoryService;
 import com.project.shopapp.services.IProductService;
-import com.project.shopapp.utils.DtoMapper;
+import com.project.shopapp.services.implement.base.BaseServiceImpl;
+import com.project.shopapp.utils.DtoMapperUtils;
 import com.project.shopapp.specs.ProductSpec;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements IProductService {
+public class ProductServiceImpl extends BaseServiceImpl implements IProductService {
 
     private final ProductRepository productRepository;
     private final ICategoryService categoryService;
 
     private final ProductSpec productSpec;
 
-    private final DtoMapper dtoMapper;
+    private final DtoMapperUtils dtoMapperUtils;
 
     @Override
     public Optional<Product> iFindOne(Specification<Product> specification) {
@@ -41,7 +43,7 @@ public class ProductServiceImpl implements IProductService {
     public Product iFindById(Long productId) {
         return productRepository
                 .findOne(productSpec.getProductById(productId))
-                .orElseThrow(() -> new NotFoundException("Product not found"));
+                .orElseThrow(() -> new NotFoundException(this.message(MessageKeys.PRODUCT.DETAIL_NOT_FOUND)));
     }
 
     @Override
@@ -53,17 +55,17 @@ public class ProductServiceImpl implements IProductService {
     public PaginatedDataResponse getProducts(ProductRequestDto productRequestDto) {
         Page<Product> products = productRepository.findAll(productSpec.getProducts(productRequestDto), productRequestDto.toPageable());
 
-        return dtoMapper.makeResponse(ProductResponseDto.class, products);
+        return dtoMapperUtils.makeResponse(ProductResponseDto.class, products);
     }
 
     @Override
     public PaginatedDataResponse getProductById(Long id) {
         if (id == null)
-            throw new NotFoundException("Product not found");
+            throw new NotFoundException(this.message(MessageKeys.PRODUCT.DETAIL_NOT_FOUND));
 
         Product product = this.iFindById(id);
 
-        return dtoMapper.makeResponse(ProductResponseDto.class, product);
+        return dtoMapperUtils.makeResponse(ProductResponseDto.class, product);
     }
 
     @Override
@@ -90,7 +92,7 @@ public class ProductServiceImpl implements IProductService {
         product.setCategory(category);
 
         product = productRepository.save(product);
-        return dtoMapper.makeResponse(ProductResponseDto.class, product);
+        return dtoMapperUtils.makeResponse(ProductResponseDto.class, product);
     }
 
     @Override
@@ -107,7 +109,7 @@ public class ProductServiceImpl implements IProductService {
         productExist.setCategory(category);
 
         productExist = productRepository.save(productExist);
-        return dtoMapper.makeResponse(ProductResponseDto.class, productExist);
+        return dtoMapperUtils.makeResponse(ProductResponseDto.class, productExist);
     }
 
     @Override

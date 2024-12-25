@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class FileUtil {
-    private final Logger logger = LoggerFactory.getLogger(FileUtil.class);
+public class FileUtils {
+    private final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
     public String getFileExtension(MultipartFile file) {
         String filename = file.getOriginalFilename();

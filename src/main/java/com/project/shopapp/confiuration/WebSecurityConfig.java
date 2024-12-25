@@ -1,6 +1,6 @@
 package com.project.shopapp.confiuration;
 
-import com.project.shopapp.utils.JwtTokenFilterUtil;
+import com.project.shopapp.utils.JwtTokenFilterUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final JwtTokenFilterUtil jwtTokenFilterUtil;
+    private final JwtTokenFilterUtils jwtTokenFilterUtils;
     private final CorsConfig corsConfig;
     private final AuthManagerConfig authManagerConfig;
 
@@ -24,7 +24,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .addFilterBefore(jwtTokenFilterUtil, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtTokenFilterUtils, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authManagerConfig)
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsConfig)
