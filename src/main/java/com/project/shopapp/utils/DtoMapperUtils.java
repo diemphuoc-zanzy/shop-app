@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class DtoMapper {
+public class DtoMapperUtils {
 
     public <T, V> PaginatedDataResponse makeResponse(Class<T> dtoType, Page<V> values) {
         List<T> responseData = values.stream()

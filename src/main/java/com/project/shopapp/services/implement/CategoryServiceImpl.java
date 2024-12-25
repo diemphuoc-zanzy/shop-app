@@ -1,6 +1,7 @@
 package com.project.shopapp.services.implement;
 
 import com.project.shopapp.common.RECORD_STATUS;
+import com.project.shopapp.common.constant.MessageKeys.*;
 import com.project.shopapp.dtos.response.CategoryResponseDto;
 import com.project.shopapp.dtos.response.base.PaginatedDataResponse;
 import com.project.shopapp.confiuration.exception.NotFoundException;
@@ -8,8 +9,9 @@ import com.project.shopapp.dtos.request.CategoryRequestDto;
 import com.project.shopapp.models.Category;
 import com.project.shopapp.repositories.CategoryRepository;
 import com.project.shopapp.services.ICategoryService;
+import com.project.shopapp.services.implement.base.BaseServiceImpl;
 import com.project.shopapp.specs.CategorySpec;
-import com.project.shopapp.utils.DtoMapper;
+import com.project.shopapp.utils.DtoMapperUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,19 +21,19 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryServiceImpl implements ICategoryService {
+public class CategoryServiceImpl extends BaseServiceImpl implements ICategoryService {
 
     private final CategoryRepository categoryRepository;
 
     private final CategorySpec categorySpec;
 
-    private final DtoMapper dtoMapper;
+    protected final DtoMapperUtils dtoMapperUtils;
 
     @Override
     public Category iFindById(Long categoryId) {
         return categoryRepository
                 .findOne(categorySpec.getCategoryById(categoryId))
-                .orElseThrow(() -> new NotFoundException("Category not found"));
+                .orElseThrow(() -> new NotFoundException(this.message(CATEGORY.DETAIL_NOT_FOUND, categoryId)));
     }
 
     @Override
@@ -44,17 +46,17 @@ public class CategoryServiceImpl implements ICategoryService {
         Page<Category> categories = categoryRepository
                 .findAll(categorySpec.getCategories(categoryRequestDto), categoryRequestDto.toPageable());
 
-        return dtoMapper.makeResponse(CategoryResponseDto.class, categories);
+        return dtoMapperUtils.makeResponse(CategoryResponseDto.class, categories);
     }
 
     @Override
     public PaginatedDataResponse getCategoryById(Long id) {
         if (id == null)
-            throw new NotFoundException("Not found Category");
+            throw new NotFoundException(this.message(CATEGORY.DETAIL_NOT_FOUND, id));
 
         Category category = this.iFindById(id);
 
-        return dtoMapper.makeResponse(CategoryResponseDto.class, category);
+        return dtoMapperUtils.makeResponse(CategoryResponseDto.class, category);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class CategoryServiceImpl implements ICategoryService {
         }
 
         category = categoryRepository.save(category);
-        return dtoMapper.makeResponse(CategoryResponseDto.class, category);
+        return dtoMapperUtils.makeResponse(CategoryResponseDto.class, category);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class CategoryServiceImpl implements ICategoryService {
         categoryExist.update(categoryRequestDto);
         categoryExist = categoryRepository.save(categoryExist);
 
-        return dtoMapper.makeResponse(CategoryResponseDto.class, categoryExist);
+        return dtoMapperUtils.makeResponse(CategoryResponseDto.class, categoryExist);
     }
 
     @Override
