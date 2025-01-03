@@ -47,8 +47,9 @@ CREATE TABLE tokens
     token           VARCHAR(255) UNIQUE NOT NULL,
     token_type      VARCHAR(50)         NOT NULL,
     expiration_date TIMESTAMP,
-    revoked         BOOLEAN             NOT NULL,
-    expired         BOOLEAN             NOT NULL
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    record_status   TEXT      DEFAULT 'ACTIVE'
 );
 
 CREATE TABLE social_accounts

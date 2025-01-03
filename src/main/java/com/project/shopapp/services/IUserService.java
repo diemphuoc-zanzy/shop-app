@@ -6,5 +6,5 @@ import com.project.shopapp.dtos.request.UserRequestDto;
 public interface IUserService {
     PaginatedDataResponse register(UserRequestDto userRequestDto);
     PaginatedDataResponse login(UserRequestDto userRequestDto);
-
+    PaginatedDataResponse refresh();
 }

@@ -35,7 +35,9 @@ api:
   prefix: /api/v1
 
 jwt:
-  expiration: 259200 #days: 30 = 30 * 24 * 60 * 60
+  maxTokens: 5
+  accessToken: 900000 #15 minus: 15 * 60 * 1000
+  refreshToken: 604800000 #7 day: 7 * 24 * 60 * 60 * 1000
   secretKey: HelloEveryOneMyNameZanzyWelcomeToJoinMyShopApp
 
 default:
