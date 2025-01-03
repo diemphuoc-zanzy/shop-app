@@ -29,7 +29,7 @@ public class BaseModel {
 
     @Column(name = "record_status", columnDefinition = "TEXT DEFAULT 'ACTIVE'")
     @Enumerated(EnumType.STRING)
-    private RECORD_STATUS recordStatus;
+    private RECORD_STATUS recordStatus = RECORD_STATUS.ACTIVE;
 
 
     @PrePersist

@@ -22,6 +22,7 @@ INSERT INTO permissions (name, description, resource, method, action, role_id) V
 
 INSERT INTO permissions (name, description, resource, method, action, role_id) VALUES ('REGISTER_USER_GUEST', 'Permission to register ', '/users/register', 'POST', 'CREATE', 5);
 INSERT INTO permissions (name, description, resource, method, action, role_id) VALUES ('LOGIN_USER_GUEST', 'Permission to login ', '/users/login', 'POST', 'UPDATE', 5);
+INSERT INTO permissions (name, description, resource, method, action, role_id) VALUES ('REFRESH_USER_GUEST', 'Permission to refresh ', '/users/refresh', 'POST', 'UPDATE', 5);
 INSERT INTO permissions (name, description, resource, method, action, role_id) VALUES ('VIEW_CATEGORY_GUEST', 'Permission to view ', '/categories/gets', 'POST', 'VIEW', 5);
 INSERT INTO permissions (name, description, resource, method, action, role_id) VALUES ('VIEW_CATEGORY_DETAIL_GUEST', 'Permission to view ', '/categories/get/{id}', 'GET', 'VIEW', 5);
 INSERT INTO permissions (name, description, resource, method, action, role_id) VALUES ('VIEW_PRODUCT_GUEST', 'Permission to view ', '/products/gets', 'POST', 'VIEW', 5);

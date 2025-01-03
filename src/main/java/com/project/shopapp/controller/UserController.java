@@ -28,4 +28,10 @@ public class UserController {
         PaginatedDataResponse response = userService.login(userRequestDto);
         return ResponseEntity.ok().body(response);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<PaginatedDataResponse> refreshToken() {
+        PaginatedDataResponse response = userService.refresh();
+        return ResponseEntity.ok().body(response);
+    }
 }

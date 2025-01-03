@@ -100,7 +100,7 @@ public class BasePredicate<T> {
     /**
      * Adds a "greater than" condition to the predicate list.
      */
-    public void addGreaterThanCondition(CriteriaBuilder builder, Path<T> root, String field, Double value) {
+    public void addGreaterThanCondition(CriteriaBuilder builder, Path<T> root, String field, Long value) {
         if (value != null) {
             predicates.add(builder.greaterThan(root.get(field), value));
         }
@@ -109,7 +109,7 @@ public class BasePredicate<T> {
     /**
      * Adds a "less than" condition to the predicate list.
      */
-    public void addLessThanCondition(CriteriaBuilder builder, Path<T> root, String field, Double value) {
+    public void addLessThanCondition(CriteriaBuilder builder, Path<T> root, String field, Long value) {
         if (value != null) {
             predicates.add(builder.lessThan(root.get(field), value));
         }
@@ -118,7 +118,7 @@ public class BasePredicate<T> {
     /**
      * Adds a "between" condition to the predicate list.
      */
-    public void addBetweenCondition(CriteriaBuilder builder, Path<T> root, String field, Double start, Double end) {
+    public void addBetweenCondition(CriteriaBuilder builder, Path<T> root, String field, Long start, Long end) {
         if (start != null && end != null) {
             predicates.add(builder.between(root.get(field), start, end));
         }

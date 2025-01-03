@@ -1,5 +1,6 @@
 package com.project.shopapp.utils;
 
+import com.project.shopapp.confiuration.exception.UnauthorizedAccessException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,6 +17,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -23,30 +25,71 @@ import java.util.function.Function;
 public class JwtTokenUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtils.class);
 
-    @Value("${jwt.expiration}")
-    private int expiration;
+    @Value("${jwt.accessToken}")
+    private int accessToken;
+
+    @Value("${jwt.refreshToken}")
+    private int refreshToken;
 
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    public String generateToken(com.project.shopapp.models.User user) {
+    private String generate(Map<String, Object> claims, String subject, int expiration) {
+        return Jwts.builder()
+               .setClaims(claims)
+               .setSubject(subject)
+               .setIssuedAt(new Date())
+               .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
+               .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+               .compact();
+    }
+
+    public String generateAccessToken(com.project.shopapp.models.User user) {
         // Tạo token JWT
         // properties -> class
         Map<String, Object> claims = new HashMap<>();
-        claims.put("phoneNumber", user.getPhoneNumber());
+        String phoneNumber = user.getPhoneNumber();
+        claims.put("phoneNumber", phoneNumber);
         try {
-            return Jwts.builder()
-                    .setClaims(claims)
-                    .setSubject(user.getPhoneNumber())
-                    // thời gian hiện tại + với 30 ngày + 1000(chuyển đổi qua giây)
-                    .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
-                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                    .compact();
+            return generate(claims, phoneNumber, accessToken);
         } catch (Exception e) {
-            logger.error("Error generating JWT token: {}", e.getMessage());
+            logger.error("Error generating JWT access token: {}", e.getMessage());
             return null;
         }
     }
+
+
+    // Tạo Refresh Token
+    public String generateRefreshToken(com.project.shopapp.models.User user) {
+        // Tạo token JWT
+        // properties -> class
+        Map<String, Object> claims = new HashMap<>();
+        String phoneNumber = user.getPhoneNumber();
+        claims.put("phoneNumber", phoneNumber);
+        try {
+            return generate(claims, phoneNumber, accessToken);
+        } catch (Exception e) {
+            logger.error("Error generating JWT refresh token: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    // Encode JWT
+    public String encode(String name,
+                         String value,
+                         int maxAge) {
+        // Tạo JWT với claims và các thông tin bổ sung
+        return Optional
+                .of(generate(Map.of(name, value), name, maxAge))
+                .orElseThrow(() -> new UnauthorizedAccessException("Unexpected encode token"));
+    }
+
+    public String decode(String token) {
+        return Optional
+                .of(extractClaim(token, Claims::getSubject))
+                .orElseThrow(() -> new UnauthorizedAccessException("Unexpected decode token"));
+    }
+
 
     private Key getSignInKey() {
         byte[] bytes = Decoders.BASE64.decode(secretKey);
@@ -61,13 +104,17 @@ public class JwtTokenUtils {
                 .getBody();
     }
 
-    public  <T> T extractClaim(String token, Function<Claims, T> clamsResolve) {
+    public <T> T extractClaim(String token, Function<Claims, T> clamsResolve) {
         final Claims claims = this.extractAllClaims(token);
         return clamsResolve.apply(claims);
     }
 
     public String extractPhoneNumber(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     //check phone number
